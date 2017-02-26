@@ -1,5 +1,6 @@
 from selenium import webdriver
 import unittest
+from selenium.webdriver.common.keys import Keys
 import time
 class VisitorThehome(unittest.TestCase):
     def setUp(self):
@@ -8,10 +9,22 @@ class VisitorThehome(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def test_newVisitor_get_the_homepage(self):
+    def test_newViseter_begin_input(self):
         self.browser.get("http://localhost:8000")
-        time.sleep(4)
         self.assertIn('To-Do',self.browser.title)
+        time.sleep(1)
+        headtxt=self.browser.find_element_by_tag_name('h1')
+        self.assertIn('To Do',headtxt.text)
+        inputbox=self.browser.find_element_by_tag_name('input')
+        self.assertEqual("add a new list",inputbox.get_attribute("placeholder"))
+
+        inputbox.send_keys("Phone my girl friend")
+        inputbox.send_keys(Keys.ENTER)
+
+        items=self.browser.find_elements_by_tag_name('tr')
+        self.assertIn(
+             "1.Phone my girl friend",[item.text for item in items],"not find your item,maybe error"
+         )
         self.fail("finishd the test")
 if __name__=='__main__':
     unittest.main(warnings='ignore')
