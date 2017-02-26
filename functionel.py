@@ -15,13 +15,15 @@ class VisitorThehome(unittest.TestCase):
         time.sleep(1)
         headtxt=self.browser.find_element_by_tag_name('h1')
         self.assertIn('To Do',headtxt.text)
-        inputbox=self.browser.find_element_by_tag_name('input')
+        inputbox=self.browser.find_element_by_id('id_new_item')
         self.assertEqual("add a new list",inputbox.get_attribute("placeholder"))
 
         inputbox.send_keys("Phone my girl friend")
+        self.browser.implicitly_wait(10)
         inputbox.send_keys(Keys.ENTER)
 
-        items=self.browser.find_elements_by_tag_name('tr')
+        table=self.browser.find_element_by_id("list_of_to_do")
+        items=table.find_elements_by_tag_name('tr')
         self.assertIn(
              "1.Phone my girl friend",[item.text for item in items],"not find your item,maybe error"
          )
