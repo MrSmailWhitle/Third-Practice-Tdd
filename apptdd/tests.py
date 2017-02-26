@@ -13,4 +13,6 @@ class homepage(TestCase):
         req=HttpRequest()
         resp=home(req)
         self.assertTrue(resp.content.startswith(b'<html>'))
+        self.assertIn('To-Do',resp.content.decode())
+        self.assertTrue(resp.content.endswith(b'</html>'))
 

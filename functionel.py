@@ -6,8 +6,7 @@ class VisitorThehome(unittest.TestCase):
         self.browser=webdriver.Ie()
         self.browser.implicitly_wait(10)
     def tearDown(self):
-        #self.browser.quit()
-        pass
+        self.browser.quit()
 
     def test_newVisitor_get_the_homepage(self):
         self.browser.get("http://localhost:8000")
