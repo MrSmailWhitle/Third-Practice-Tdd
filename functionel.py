@@ -20,14 +20,31 @@ class VisitorThehome(unittest.TestCase):
         inputbox=self.browser.find_element_by_id('id_new_item')
         self.assertEqual("add a new list",inputbox.get_attribute("placeholder"))
 
-        inputbox.send_keys("Phone my girl friend")
+        inputbox.send_keys("Lilei,Phone my girl friend")
         inputbox.send_keys(Keys.ENTER)
         time.sleep(5)
         table=self.browser.find_element_by_id("list_of_to_do")
         items=table.find_elements_by_tag_name('tr')
         self.assertIn(
-             "1.Phone my girl friend",[item.text for item in items],"not find your item,maybe error"
+             "1.Lilei,Phone my girl friend",[item.text for item in items],"not find your item,maybe error--it text"
          )
+
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys("Lilei,Call to mum hello")
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(5)
+        table = self.browser.find_element_by_id("list_of_to_do")
+        items = table.find_elements_by_tag_name('tr')
+        self.assertIn(
+            "Lilei,Phone my girl friend", [item.text for item in items], "not find your item,maybe error--it text"
+        )
+        self.assertIn(
+            "2.Lilei,Call to mum hello", [item.text for item in items], "not find your item,maybe error--it text"
+        )
+        
+
+
         self.fail("finishd the test")
+
 if __name__=='__main__':
     unittest.main(warnings='ignore')
