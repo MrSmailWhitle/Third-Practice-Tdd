@@ -8,6 +8,10 @@ class VisitorThehome(unittest.TestCase):
         self.browser.implicitly_wait(10)
     def tearDown(self):
         self.browser.quit()
+    def check_out_todo_list_item(self,item_txt):
+        table=self.browser.find_element_by_id("list_of_to_do")
+        rows=table.find_elements_by_tag_name('tr')
+        self.assertIn(item_txt,[row.text for row in rows])
 
     def test_newViseter_begin_input(self):
         self.browser.get("http://localhost:8000")
@@ -23,26 +27,14 @@ class VisitorThehome(unittest.TestCase):
         inputbox.send_keys("Lilei,Phone my girl friend")
         inputbox.send_keys(Keys.ENTER)
         time.sleep(5)
-        table=self.browser.find_element_by_id("list_of_to_do")
-        items=table.find_elements_by_tag_name('tr')
-        self.assertIn(
-             "1.Lilei,Phone my girl friend",[item.text for item in items],"not find your item,maybe error--it text"
-         )
+        self.check_out_todo_list_item('1.Lilei,Phone my girl friend')
 
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys("Lilei,Call to mum hello")
         inputbox.send_keys(Keys.ENTER)
         time.sleep(5)
-        table = self.browser.find_element_by_id("list_of_to_do")
-        items = table.find_elements_by_tag_name('tr')
-        self.assertIn(
-            "Lilei,Phone my girl friend", [item.text for item in items], "not find your item,maybe error--it text"
-        )
-        self.assertIn(
-            "2.Lilei,Call to mum hello", [item.text for item in items], "not find your item,maybe error--it text"
-        )
-        
-
+        self.check_out_todo_list_item('2.Lilei,Call to mum hello')
+        self.check_out_todo_list_item('1.Lilei,Phone my girl friend')
 
         self.fail("finishd the test")
 
