@@ -3,6 +3,7 @@ from django.core.urlresolvers import resolve
 from apptdd.views import home
 from django.template.loader import render_to_string
 from django.http import HttpRequest
+from django.http import HttpResponse
 from apptdd.models import Item
 # Create your tests here.
 class homepage(TestCase):
@@ -28,12 +29,34 @@ class homepage(TestCase):
         res.POST['new a item']="a new list item"
 
         resp=home(res)
-        print(resp.content.decode())
+        #print(resp.content.decode())
 
-        self.assertIn('a new list item',resp.content.decode())
-        excepted_html=render_to_string('home.html',{'new_item_text':'a new list item'})
-        print(excepted_html)
-        self.assertEqual(resp.content.decode(),excepted_html)
+        self.assertEqual(Item.objects.count(),1)
+        new_item=Item.objects.first()
+        self.assertEqual(new_item.text,'a new list item')
+
+        self.assertEqual(resp.status_code,302)
+        self.assertEqual(resp['location'],'/')
+        ##self.assertIn('a new list item',resp.content.decode())
+        ##excepted_html=render_to_string('home.html',{'new_item_text':'a new list item'})
+        #print(excepted_html)
+        ##self.assertEqual(resp.content.decode(),excepted_html)
+    def test_home_only_saves_items_when_nessary(self):
+        request=HttpRequest()
+        response=home(request)
+        self.assertEqual(Item.objects.count(),0)
+    def test_home_displays_all_list_items(self):
+        Item.objects.create(text='itemey 1')
+        Item.objects.create(text='itemey 2')
+
+        request=HttpRequest()
+        response=home(request)
+
+        self.assertIn('itemey 1',response.content.decode())
+        self.assertIn('itemey 2', response.content.decode())
+
+
+
 class ItemModel(TestCase):
     def test_saving_and_retrieving_items(self):
         first_item=Item()
