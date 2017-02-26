@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import resolve
 from apptdd.views import home
+from django.template.loader import render_to_string
 from django.http import HttpRequest
 # Create your tests here.
 class homepage(TestCase):
@@ -15,4 +16,9 @@ class homepage(TestCase):
         self.assertTrue(resp.content.startswith(b'<html>'))
         self.assertIn('To-Do',resp.content.decode())
         self.assertTrue(resp.content.endswith(b'</html>'))
+    def test_renderTOstring(self):
+        req=HttpRequest()
+        resp=home(req)
+        expected_html=render_to_string('home.html')
+        self.assertEqual(expected_html,resp.content.decode())
 
