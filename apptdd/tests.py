@@ -21,4 +21,10 @@ class homepage(TestCase):
         resp=home(req)
         expected_html=render_to_string('home.html')
         self.assertEqual(expected_html,resp.content.decode())
+    def test_home_can_save_post_data(self):
+        res=HttpRequest()
+        res.method="POST"
+        res.POST['new a item']="a new list item"
 
+        resp=home(res)
+        self.assertIn('a new list item',resp.content.decode())
