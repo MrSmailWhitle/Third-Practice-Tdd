@@ -4,6 +4,7 @@ import time
 class VisitorThehome(unittest.TestCase):
     def setUp(self):
         self.browser=webdriver.Ie()
+        self.browser.implicitly_wait(10)
     def tearDown(self):
         self.browser.quit()
 
