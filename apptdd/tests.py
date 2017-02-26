@@ -27,4 +27,9 @@ class homepage(TestCase):
         res.POST['new a item']="a new list item"
 
         resp=home(res)
+        print(resp.content.decode())
+
         self.assertIn('a new list item',resp.content.decode())
+        excepted_html=render_to_string('home.html',{'new_item_text':'a new list item'})
+        print(excepted_html)
+        self.assertEqual(resp.content.decode(),excepted_html)
