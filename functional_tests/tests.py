@@ -1,8 +1,9 @@
 from selenium import webdriver
-import unittest
+#import unittest
 from selenium.webdriver.common.keys import Keys
+from django.test import LiveServerTestCase
 import time
-class VisitorThehome(unittest.TestCase):
+class VisitorThehome(LiveServerTestCase):
     def setUp(self):
         self.browser=webdriver.Ie()
         self.browser.implicitly_wait(10)
@@ -14,7 +15,7 @@ class VisitorThehome(unittest.TestCase):
         self.assertIn(item_txt,[row.text for row in rows])
 
     def test_newViseter_begin_input(self):
-        self.browser.get("http://localhost:8000")
+        self.browser.get(self.live_server_url)
         print(self.browser.title)
         #time.sleep(10)
         self.assertIn('To-Do',self.browser.title)
@@ -39,5 +40,5 @@ class VisitorThehome(unittest.TestCase):
 
         self.fail("finishd the test")
 
-if __name__=='__main__':
-    unittest.main(warnings='ignore')
+#if __name__=='__main__':
+   # unittest.main(warnings='ignore')
