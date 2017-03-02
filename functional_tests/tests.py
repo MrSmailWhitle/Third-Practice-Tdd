@@ -25,9 +25,14 @@ class VisitorThehome(LiveServerTestCase):
         inputbox=self.browser.find_element_by_id('id_new_item')
         self.assertEqual("add a new list",inputbox.get_attribute("placeholder"))
 
+
         inputbox.send_keys("Lilei,Phone my girl friend")
         inputbox.send_keys(Keys.ENTER)
+        #she enter the button.then the web go to the url new;new...
         time.sleep(3)
+        edith_list_url=self.browser.current_url
+        self.assertRegex(edith_list_url,'/apptdd/.+')
+        #...new
         self.check_out_todo_list_item('1.Lilei,Phone my girl friend')
 
         time.sleep(2)
@@ -37,8 +42,27 @@ class VisitorThehome(LiveServerTestCase):
         time.sleep(3)
         self.check_out_todo_list_item('2.Lilei,Call to mum hello')
         self.check_out_todo_list_item('1.Lilei,Phone my girl friend')
+        #a new visitor get in the web and enter the wait items.
+        self.browser.quit()
+        self.browser=webdriver.Ie()
+        self.browser.get(self.live_server_url)
+        page_text=self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Lilei,Phone my girl friend',page_text)
+        self.assertNotIn('Lilei,Call to mum hello',page_text)
+        #he in self items
+        inputbox=self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('wangxun,helloworld')
+        inputbox.send_keys(Keys.ENTER)
 
-        self.fail("finishd the test")
+        wangx_url=self.browser.current_url
+        self.assertRegex(wangx_url,'/apptdd/.+')
+        self.assertNotIn(wangx_url,edith_list_url)
+
+        page_text=self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Lilei,Phone my girl friend',page_text)
+        self.assertIn('wangxun,helloworld',page_text)
+
+        #self.fail("finishd the test")
 
 #if __name__=='__main__':
    # unittest.main(warnings='ignore')
