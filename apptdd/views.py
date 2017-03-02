@@ -19,10 +19,13 @@ def home(request):
         ###new_item_text=request.POST['new a item']
         ###Item.objects.create(text=new_item_text)
         Item.objects.create(text=request.POST['new a item'])
-        return redirect('/')
+        return redirect('/apptdd/the-only-list-in-world/')
     ###else:
         ###new_item_text=''
     ###return render(request,'home.html',{'new_item_text':new_item_text,})
     ####return render(request,'home.html')
     items=Item.objects.all()
     return render(request,'home.html',{'items':items})
+def view_lists(request):
+    items = Item.objects.all()
+    return render(request, 'home.html', {'items': items})

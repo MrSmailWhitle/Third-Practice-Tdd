@@ -36,7 +36,7 @@ class homepage(TestCase):
         self.assertEqual(new_item.text,'a new list item')
 
         self.assertEqual(resp.status_code,302)
-        self.assertEqual(resp['location'],'/')
+        self.assertEqual(resp['location'],'/apptdd/the-only-list-in-world/')
         ##self.assertIn('a new list item',resp.content.decode())
         ##excepted_html=render_to_string('home.html',{'new_item_text':'a new list item'})
         #print(excepted_html)
@@ -74,3 +74,12 @@ class ItemModel(TestCase):
         second_saved_item=saved_items[1]
         self.assertEqual(first_saved_item.text,'The first list item')
         self.assertEqual(second_saved_item.text,'Item the second')
+class ListViewTest(TestCase):
+    def test_displays_all_items(self):
+        Item.objects.create(text='itemey 1')
+        Item.objects.create(text='itemey 2')
+
+        response = self.client.get('/apptdd/the-only-list-in-world/')
+
+        self.assertContains(response,'itemey 1')
+        self.assertContains(response,'itemey 2')
